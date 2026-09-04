@@ -6,17 +6,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#2c5f2d">
-    <meta name="description" content="Login to Poultry Farm Tracker">
     <title>Poultry Farm Tracker - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
@@ -24,18 +19,18 @@
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #2c5f2d 0%, #1e4d2b 100%);
+            padding: 10px;
         }
-
         .login-container {
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
-            width: 900px;
+            width: 100%;
+            max-width: 900px;
             min-height: 500px;
             display: flex;
         }
-
         .login-left {
             flex: 1;
             background: linear-gradient(135deg, #2c5f2d 0%, #1e4d2b 100%);
@@ -47,22 +42,9 @@
             color: white;
             text-align: center;
         }
-
-        .login-left .logo {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-
-        .login-left h1 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .login-left p {
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
-
+        .login-left .logo { font-size: 4rem; margin-bottom: 20px; }
+        .login-left h1 { font-size: 1.8rem; margin-bottom: 10px; }
+        .login-left p { opacity: 0.9; font-size: 0.95rem; }
         .login-right {
             flex: 1;
             padding: 50px 40px;
@@ -70,42 +52,13 @@
             flex-direction: column;
             justify-content: center;
         }
-
-        .login-right h2 {
-            font-size: 1.8rem;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .login-right .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-        }
-
-        .form-group input {
+        .login-right h2 { font-size: 1.8rem; color: #333; margin-bottom: 10px; }
+        .login-right .subtitle { color: #666; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #999; }
+        .form-group input, .form-group select {
             width: 100%;
             padding: 15px 15px 15px 45px;
             border: 2px solid #e0e0e0;
@@ -114,36 +67,11 @@
             font-family: inherit;
             transition: border-color 0.3s;
         }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #2c5f2d;
-        }
-
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #666;
-        }
-
-        .remember-me input {
-            width: auto;
-        }
-
-        .forgot-password {
-            color: #2c5f2d;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #2c5f2d; }
+        .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
+        .remember-me { display: flex; align-items: center; gap: 8px; color: #666; }
+        .remember-me input { width: auto; }
+        .forgot-link { color: #2c5f2d; text-decoration: none; font-size: 0.9rem; }
         .btn-login {
             width: 100%;
             padding: 15px;
@@ -160,197 +88,56 @@
             justify-content: center;
             gap: 10px;
         }
-
-        .btn-login:hover {
-            background: #1e4d2b;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 25px 0;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 1px;
-            background: #e0e0e0;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 15px;
-            color: #999;
-            position: relative;
-        }
-
-        .register-link {
-            text-align: center;
-            color: #666;
-        }
-
-        .register-link a {
-            color: #2c5f2d;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
+        .btn-login:hover { background: #1e4d2b; }
+        .btn-login:disabled { background: #999; cursor: not-allowed; }
+        .divider { text-align: center; margin: 25px 0; position: relative; }
+        .divider::before { content: ''; position: absolute; left: 0; top: 50%; width: 100%; height: 1px; background: #e0e0e0; }
+        .divider span { background: white; padding: 0 15px; color: #999; position: relative; }
+        .register-link { text-align: center; color: #666; }
+        .register-link a { color: #2c5f2d; text-decoration: none; font-weight: 600; }
         .error-message {
-            background: #ffebee;
-            color: #d32f2f;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-            align-items: center;
-            gap: 10px;
+            background: #ffebee; color: #d32f2f; padding: 12px; border-radius: 8px;
+            margin-bottom: 20px; display: none; align-items: center; gap: 10px;
         }
-
-        .error-message.show {
-            display: flex;
-        }
-
+        .error-message.show { display: flex; }
         .success-message {
-            background: #e8f5e9;
-            color: #388e3c;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-            align-items: center;
-            gap: 10px;
+            background: #e8f5e9; color: #388e3c; padding: 12px; border-radius: 8px;
+            margin-bottom: 20px; display: none; align-items: center; gap: 10px;
         }
-
-        .success-message.show {
-            display: flex;
-        }
-
-        /* Register Form */
-        .register-form {
-            display: none;
-        }
-
-        .register-form.active {
-            display: block;
-        }
-
-        .login-form {
-            display: block;
-        }
-
-        .login-form.hidden {
-            display: none;
-        }
-
-        .reset-form {
-            display: none;
-        }
-
-        .reset-form.active {
-            display: block;
-        }
-
-        .forgot-password {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-
-        .forgot-password a {
-            color: #2c5f2d;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .forgot-password a:hover {
-            text-decoration: underline;
-        }
-
-        .back-to-login {
+        .success-message.show { display: flex; }
+        .register-form, .reset-form { display: none; }
+        .register-form.active, .reset-form.active { display: block; }
+        .login-form.hidden { display: none; }
+        .back-to-login { text-align: center; margin-top: 20px; }
+        .back-to-login a { color: #2c5f2d; text-decoration: none; font-weight: 500; }
+        .otp-container { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
+        .otp-input {
+            width: 50px !important;
+            height: 55px;
             text-align: center;
-            margin-top: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 0 !important;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: 0.3s;
         }
-
-        .back-to-login a {
-            color: #2c5f2d;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
+        .otp-input:focus { border-color: #2c5f2d; }
+        .otp-timer { text-align: center; color: #666; margin-bottom: 20px; }
+        .otp-timer span { color: #2c5f2d; font-weight: 600; }
+        .resend-otp { text-align: center; margin-top: 15px; }
+        .resend-otp a { color: #2c5f2d; text-decoration: none; font-weight: 500; cursor: pointer; }
+        .resend-otp a:hover { text-decoration: underline; }
+        .resend-otp a.disabled { color: #999; cursor: not-allowed; pointer-events: none; }
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-                align-items: flex-start;
-                padding-top: 20px;
-            }
-
-            .login-container {
-                flex-direction: column;
-                width: 100%;
-                max-width: 400px;
-                min-height: auto;
-            }
-
-            .login-left {
-                padding: 30px 20px;
-            }
-
-            .login-left .logo {
-                font-size: 3rem;
-            }
-
-            .login-left h1 {
-                font-size: 1.4rem;
-            }
-
-            .login-left p {
-                font-size: 0.85rem;
-            }
-
-            .login-right {
-                padding: 30px 20px;
-            }
-
-            .login-right h2 {
-                font-size: 1.4rem;
-            }
-
-            .form-group input {
-                padding: 12px 12px 12px 40px;
-                font-size: 16px;
-            }
-
-            .btn-login {
-                padding: 14px;
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .login-left {
-                padding: 20px 15px;
-            }
-
-            .login-left .logo {
-                font-size: 2.5rem;
-            }
-
-            .login-left h1 {
-                font-size: 1.2rem;
-            }
-
-            .login-right {
-                padding: 20px 15px;
-            }
-
-            .form-options {
-                flex-direction: column;
-                gap: 10px;
-                align-items: flex-start;
-            }
+            .login-container { flex-direction: column; max-width: 400px; min-height: auto; }
+            .login-left { padding: 30px 20px; }
+            .login-left .logo { font-size: 3rem; }
+            .login-left h1 { font-size: 1.4rem; }
+            .login-right { padding: 30px 20px; }
+            .login-right h2 { font-size: 1.4rem; }
+            .form-group input { padding: 12px 12px 12px 40px; font-size: 16px; }
+            .otp-input { width: 45px !important; height: 50px; font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -366,12 +153,10 @@
             <div class="login-form" id="loginForm">
                 <h2>Welcome Back!</h2>
                 <p class="subtitle">Sign in to access your farm data</p>
-                
                 <div class="error-message" id="loginError">
                     <i class="fas fa-exclamation-circle"></i>
                     <span id="loginErrorText">Invalid username or password</span>
                 </div>
-
                 <form id="signinForm">
                     <div class="form-group">
                         <label>Username</label>
@@ -397,9 +182,7 @@
                         <i class="fas fa-sign-in-alt"></i> Sign In
                     </button>
                 </form>
-                
                 <div class="divider"><span>or</span></div>
-                
                 <p class="register-link">
                     Don't have an account? <a href="#" id="showRegister">Create Account</a>
                 </p>
@@ -409,23 +192,27 @@
             <div class="register-form" id="registerForm">
                 <h2>Create Account</h2>
                 <p class="subtitle">Set up your farm tracker account</p>
-                
                 <div class="error-message" id="registerError">
                     <i class="fas fa-exclamation-circle"></i>
                     <span id="registerErrorText">Error occurred</span>
                 </div>
-
                 <div class="success-message" id="registerSuccess">
                     <i class="fas fa-check-circle"></i>
                     <span>Account created successfully!</span>
                 </div>
-
                 <form id="signupForm">
                     <div class="form-group">
                         <label>Full Name</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user"></i>
                             <input type="text" id="regName" placeholder="Enter your name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="regEmail" placeholder="Enter your email" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -449,31 +236,11 @@
                             <input type="password" id="regConfirmPassword" placeholder="Confirm password" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Security Question</label>
-                        <select id="regSecurityQuestion" required>
-                            <option value="">Select a question</option>
-                            <option value="pet">What is your pet's name?</option>
-                            <option value="school">What school did you attend?</option>
-                            <option value="city">What city were you born in?</option>
-                            <option value="color">What is your favorite color?</option>
-                            <option value="food">What is your favorite food?</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Security Answer</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-shield-alt"></i>
-                            <input type="text" id="regSecurityAnswer" placeholder="Your answer" required>
-                        </div>
-                    </div>
                     <button type="submit" class="btn-login">
                         <i class="fas fa-user-plus"></i> Create Account
                     </button>
                 </form>
-                
                 <div class="divider"><span>or</span></div>
-                
                 <p class="register-link">
                     Already have an account? <a href="#" id="showLogin">Sign In</a>
                 </p>
@@ -482,59 +249,70 @@
             <!-- Reset Password Form -->
             <div class="reset-form" id="resetForm">
                 <h2>Reset Password</h2>
-                <p class="subtitle">Answer your security question to reset</p>
-                
+                <p class="subtitle" id="resetSubtitle">Enter your email to receive OTP</p>
                 <div class="error-message" id="resetError">
                     <i class="fas fa-exclamation-circle"></i>
                     <span id="resetErrorText">Error occurred</span>
                 </div>
-
                 <div class="success-message" id="resetSuccess">
                     <i class="fas fa-check-circle"></i>
-                    <span id="resetSuccessText">Password reset successful!</span>
+                    <span id="resetSuccessText"></span>
                 </div>
-
                 <form id="resetPasswordForm">
-                    <div class="form-group">
-                        <label>Username</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="resetUsername" placeholder="Enter your username" required>
+                    <!-- Step 1: Enter Email -->
+                    <div id="resetStep1">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="resetEmail" placeholder="Enter your registered email" required>
+                            </div>
                         </div>
+                        <button type="submit" class="btn-login">
+                            <i class="fas fa-paper-plane"></i> Send OTP
+                        </button>
                     </div>
-                    <div class="form-group" id="securityQuestionGroup" style="display: none;">
-                        <label>Security Question</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-question-circle"></i>
-                            <input type="text" id="resetSecurityQuestion" readonly>
+                    <!-- Step 2: Enter OTP -->
+                    <div id="resetStep2" style="display: none;">
+                        <div class="otp-timer">
+                            OTP sent to <span id="otpEmailDisplay"></span>
                         </div>
-                    </div>
-                    <div class="form-group" id="securityAnswerGroup" style="display: none;">
-                        <label>Your Answer</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-shield-alt"></i>
-                            <input type="text" id="resetSecurityAnswer" placeholder="Enter your answer" required>
+                        <div class="otp-container">
+                            <input type="text" class="otp-input" maxlength="1" id="otp1">
+                            <input type="text" class="otp-input" maxlength="1" id="otp2">
+                            <input type="text" class="otp-input" maxlength="1" id="otp3">
+                            <input type="text" class="otp-input" maxlength="1" id="otp4">
+                            <input type="text" class="otp-input" maxlength="1" id="otp5">
+                            <input type="text" class="otp-input" maxlength="1" id="otp6">
                         </div>
-                    </div>
-                    <div class="form-group" id="newPasswordGroup" style="display: none;">
-                        <label>New Password</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="resetNewPassword" placeholder="Min 6 characters" minlength="6" required>
+                        <div class="resend-otp">
+                            <a href="#" id="resendOtp" class="disabled">Resend OTP in <span id="otpTimer">60</span>s</a>
                         </div>
+                        <button type="submit" class="btn-login" style="margin-top: 20px;">
+                            <i class="fas fa-check"></i> Verify OTP
+                        </button>
                     </div>
-                    <div class="form-group" id="confirmPasswordGroup" style="display: none;">
-                        <label>Confirm New Password</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="resetConfirmPassword" placeholder="Confirm password" required>
+                    <!-- Step 3: New Password -->
+                    <div id="resetStep3" style="display: none;">
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="newPassword" placeholder="Min 6 characters" minlength="6" required>
+                            </div>
                         </div>
+                        <div class="form-group">
+                            <label>Confirm New Password</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="confirmNewPassword" placeholder="Confirm password" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-login">
+                            <i class="fas fa-key"></i> Reset Password
+                        </button>
                     </div>
-                    <button type="submit" class="btn-login" id="resetSubmitBtn">
-                        <i class="fas fa-search"></i> Find Account
-                    </button>
                 </form>
-                
                 <div class="back-to-login">
                     <a href="#" id="backToLogin">← Back to Login</a>
                 </div>
@@ -543,11 +321,22 @@
     </div>
 
     <script>
+        // Initialize EmailJS (FREE - get your keys at https://www.emailjs.com/)
+        // Replace these with your own EmailJS keys
+        const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+        const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
+        const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+
+        // Try to initialize EmailJS
+        try {
+            if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+            }
+        } catch(e) {}
+
         // Check if already logged in
         const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-            window.location.href = 'index.html';
-        }
+        if (currentUser) { window.location.href = 'index.html'; }
 
         // Toggle forms
         document.getElementById('showRegister').addEventListener('click', (e) => {
@@ -555,31 +344,21 @@
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.add('active');
         });
-
         document.getElementById('showLogin').addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('registerForm').classList.remove('active');
             document.getElementById('loginForm').classList.remove('hidden');
         });
-
         document.getElementById('showForgot').addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('resetForm').classList.add('active');
         });
-
         document.getElementById('backToLogin').addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('resetForm').classList.remove('active');
             document.getElementById('loginForm').classList.remove('hidden');
-            // Reset form state
-            document.getElementById('securityQuestionGroup').style.display = 'none';
-            document.getElementById('securityAnswerGroup').style.display = 'none';
-            document.getElementById('newPasswordGroup').style.display = 'none';
-            document.getElementById('confirmPasswordGroup').style.display = 'none';
-            document.getElementById('resetSubmitBtn').innerHTML = '<i class="fas fa-search"></i> Find Account';
-            document.getElementById('resetError').classList.remove('show');
-            document.getElementById('resetSuccess').classList.remove('show');
+            resetFormState();
         });
 
         // Simple hash function
@@ -591,6 +370,11 @@
                 hash = hash & hash;
             }
             return hash.toString(36);
+        }
+
+        // Generate 6-digit OTP
+        function generateOTP() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
         }
 
         // Get users from localStorage
@@ -607,19 +391,13 @@
         // Login
         document.getElementById('signinForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
-            
             const users = getUsers();
             const user = users.find(u => u.username === username && u.password === simpleHash(password));
-            
             if (user) {
                 localStorage.setItem('currentUser', JSON.stringify({
-                    id: user.id,
-                    name: user.name,
-                    username: user.username
+                    id: user.id, name: user.name, username: user.username
                 }));
                 window.location.href = 'index.html';
             } else {
@@ -631,70 +409,43 @@
         // Register
         document.getElementById('signupForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            
             const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
             const username = document.getElementById('regUsername').value.trim();
             const password = document.getElementById('regPassword').value;
             const confirmPassword = document.getElementById('regConfirmPassword').value;
-            const securityQuestion = document.getElementById('regSecurityQuestion').value;
-            const securityAnswer = document.getElementById('regSecurityAnswer').value.trim().toLowerCase();
-            
-            // Hide previous messages
             document.getElementById('registerError').classList.remove('show');
             document.getElementById('registerSuccess').classList.remove('show');
-            
-            // Validation
             if (password !== confirmPassword) {
                 document.getElementById('registerError').classList.add('show');
                 document.getElementById('registerErrorText').textContent = 'Passwords do not match';
                 return;
             }
-            
-            if (!securityQuestion) {
-                document.getElementById('registerError').classList.add('show');
-                document.getElementById('registerErrorText').textContent = 'Please select a security question';
-                return;
-            }
-            
             const users = getUsers();
-            
             if (users.find(u => u.username === username)) {
                 document.getElementById('registerError').classList.add('show');
                 document.getElementById('registerErrorText').textContent = 'Username already exists';
                 return;
             }
-            
-            // Create new user
+            if (users.find(u => u.email === email)) {
+                document.getElementById('registerError').classList.add('show');
+                document.getElementById('registerErrorText').textContent = 'Email already registered';
+                return;
+            }
             const newUser = {
-                id: Date.now(),
-                name: name,
-                username: username,
+                id: Date.now(), name, email, username,
                 password: simpleHash(password),
-                securityQuestion: securityQuestion,
-                securityAnswer: simpleHash(securityAnswer),
                 createdAt: new Date().toISOString()
             };
-            
             users.push(newUser);
             saveUsers(users);
-            
-            // Initialize empty farm data for this user
             const emptyFarmData = {
-                hens: [],
-                chicks: [],
-                production: [],
-                inventory: [],
-                health: [],
-                mortality: [],
-                expenses: [],
-                vaccines: [],
+                hens: [], chicks: [], production: [], inventory: [],
+                health: [], mortality: [], expenses: [], vaccines: [],
                 settings: { eggPrice: 6, henPrice: 350 }
             };
             localStorage.setItem(`farmData_${newUser.id}`, JSON.stringify(emptyFarmData));
-            
             document.getElementById('registerSuccess').classList.add('show');
-            
-            // Switch to login after 1.5 seconds
             setTimeout(() => {
                 document.getElementById('registerForm').classList.remove('active');
                 document.getElementById('loginForm').classList.remove('hidden');
@@ -703,114 +454,177 @@
             }, 1500);
         });
 
-        // Reset Password
-        let resetUsername = '';
-        let resetStep = 1;
+        // Reset Password Variables
+        let currentOTP = '';
+        let resetEmail = '';
+        let otpCountdown = 60;
+        let otpInterval = null;
 
-        document.getElementById('resetPasswordForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
+        function resetFormState() {
+            document.getElementById('resetStep1').style.display = 'block';
+            document.getElementById('resetStep2').style.display = 'none';
+            document.getElementById('resetStep3').style.display = 'none';
             document.getElementById('resetError').classList.remove('show');
             document.getElementById('resetSuccess').classList.remove('show');
-            
-            if (resetStep === 1) {
-                // Find account
-                const username = document.getElementById('resetUsername').value.trim();
+            document.getElementById('resetPasswordForm').reset();
+            currentOTP = '';
+            resetEmail = '';
+            if (otpInterval) clearInterval(otpInterval);
+        }
+
+        // OTP Input auto-focus
+        document.querySelectorAll('.otp-input').forEach((input, index, inputs) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Reset Password Form
+        document.getElementById('resetPasswordForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.getElementById('resetError').classList.remove('show');
+            document.getElementById('resetSuccess').classList.remove('show');
+
+            // Step 1: Send OTP
+            if (document.getElementById('resetStep1').style.display !== 'none') {
+                resetEmail = document.getElementById('resetEmail').value.trim().toLowerCase();
                 const users = getUsers();
-                const user = users.find(u => u.username === username);
-                
+                const user = users.find(u => u.email === resetEmail);
                 if (!user) {
                     document.getElementById('resetError').classList.add('show');
-                    document.getElementById('resetErrorText').textContent = 'Username not found';
+                    document.getElementById('resetErrorText').textContent = 'Email not found';
                     return;
                 }
-                
-                if (!user.securityQuestion) {
+                currentOTP = generateOTP();
+                // Store OTP temporarily
+                localStorage.setItem('resetOTP', simpleHash(currentOTP));
+                localStorage.setItem('resetEmail', resetEmail);
+                localStorage.setItem('otpExpiry', Date.now() + 300000); // 5 minutes
+
+                // Send OTP via EmailJS or show it
+                sendOTP(resetEmail, currentOTP);
+
+                document.getElementById('otpEmailDisplay').textContent = resetEmail;
+                document.getElementById('resetStep1').style.display = 'none';
+                document.getElementById('resetStep2').style.display = 'block';
+                startOtpTimer();
+            }
+            // Step 2: Verify OTP
+            else if (document.getElementById('resetStep2').style.display !== 'none') {
+                const otp = document.getElementById('otp1').value +
+                           document.getElementById('otp2').value +
+                           document.getElementById('otp3').value +
+                           document.getElementById('otp4').value +
+                           document.getElementById('otp5').value +
+                           document.getElementById('otp6').value;
+                const storedOTP = localStorage.getItem('resetOTP');
+                const expiry = parseInt(localStorage.getItem('otpExpiry'));
+
+                if (Date.now() > expiry) {
                     document.getElementById('resetError').classList.add('show');
-                    document.getElementById('resetErrorText').textContent = 'This account has no security question set. Please contact support.';
+                    document.getElementById('resetErrorText').textContent = 'OTP expired. Please resend.';
                     return;
                 }
-                
-                resetUsername = username;
-                
-                // Show security question
-                const questions = {
-                    pet: "What is your pet's name?",
-                    school: "What school did you attend?",
-                    city: "What city were you born in?",
-                    color: "What is your favorite color?",
-                    food: "What is your favorite food?"
-                };
-                
-                document.getElementById('resetSecurityQuestion').value = questions[user.securityQuestion] || user.securityQuestion;
-                document.getElementById('securityQuestionGroup').style.display = 'block';
-                document.getElementById('securityAnswerGroup').style.display = 'block';
-                document.getElementById('resetSubmitBtn').innerHTML = '<i class="fas fa-check"></i> Verify Answer';
-                resetStep = 2;
-                
-            } else if (resetStep === 2) {
-                // Verify answer
-                const answer = document.getElementById('resetSecurityAnswer').value.trim().toLowerCase();
-                const users = getUsers();
-                const user = users.find(u => u.username === resetUsername);
-                
-                if (user.securityAnswer !== simpleHash(answer)) {
+                if (simpleHash(otp) !== storedOTP) {
                     document.getElementById('resetError').classList.add('show');
-                    document.getElementById('resetErrorText').textContent = 'Incorrect answer. Please try again.';
+                    document.getElementById('resetErrorText').textContent = 'Invalid OTP. Please try again.';
                     return;
                 }
-                
-                // Show new password fields
-                document.getElementById('newPasswordGroup').style.display = 'block';
-                document.getElementById('confirmPasswordGroup').style.display = 'block';
-                document.getElementById('resetSubmitBtn').innerHTML = '<i class="fas fa-key"></i> Reset Password';
-                resetStep = 3;
-                
-            } else if (resetStep === 3) {
-                // Reset password
-                const newPassword = document.getElementById('resetNewPassword').value;
-                const confirmPassword = document.getElementById('resetConfirmPassword').value;
-                
-                if (newPassword !== confirmPassword) {
+                document.getElementById('resetStep2').style.display = 'none';
+                document.getElementById('resetStep3').style.display = 'block';
+            }
+            // Step 3: Reset Password
+            else if (document.getElementById('resetStep3').style.display !== 'none') {
+                const newPass = document.getElementById('newPassword').value;
+                const confirmPass = document.getElementById('confirmNewPassword').value;
+                if (newPass !== confirmPass) {
                     document.getElementById('resetError').classList.add('show');
                     document.getElementById('resetErrorText').textContent = 'Passwords do not match';
                     return;
                 }
-                
-                if (newPassword.length < 6) {
+                if (newPass.length < 6) {
                     document.getElementById('resetError').classList.add('show');
                     document.getElementById('resetErrorText').textContent = 'Password must be at least 6 characters';
                     return;
                 }
-                
-                // Update password
                 const users = getUsers();
-                const userIndex = users.findIndex(u => u.username === resetUsername);
-                users[userIndex].password = simpleHash(newPassword);
+                const userIndex = users.findIndex(u => u.email === resetEmail);
+                users[userIndex].password = simpleHash(newPass);
                 saveUsers(users);
-                
+                localStorage.removeItem('resetOTP');
+                localStorage.removeItem('resetEmail');
+                localStorage.removeItem('otpExpiry');
+
                 document.getElementById('resetSuccess').classList.add('show');
-                document.getElementById('resetSuccessText').textContent = 'Password reset successful! You can now login.';
-                document.getElementById('resetSubmitBtn').disabled = true;
-                
+                document.getElementById('resetSuccessText').textContent = 'Password reset successful!';
                 setTimeout(() => {
                     document.getElementById('resetForm').classList.remove('active');
                     document.getElementById('loginForm').classList.remove('hidden');
-                    document.getElementById('loginUsername').value = resetUsername;
+                    document.getElementById('loginUsername').value = users[userIndex].username;
                     document.getElementById('loginPassword').focus();
-                    // Reset form
-                    resetStep = 1;
-                    resetUsername = '';
-                    document.getElementById('resetPasswordForm').reset();
-                    document.getElementById('securityQuestionGroup').style.display = 'none';
-                    document.getElementById('securityAnswerGroup').style.display = 'none';
-                    document.getElementById('newPasswordGroup').style.display = 'none';
-                    document.getElementById('confirmPasswordGroup').style.display = 'none';
-                    document.getElementById('resetSubmitBtn').innerHTML = '<i class="fas fa-search"></i> Find Account';
-                    document.getElementById('resetSubmitBtn').disabled = false;
+                    resetFormState();
                 }, 2000);
             }
         });
+
+        // Send OTP
+        function sendOTP(email, otp) {
+            // If EmailJS is configured, send email
+            if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
+                const templateParams = {
+                    to_email: email,
+                    otp_code: otp,
+                    farm_name: 'Poultry Farm Tracker'
+                };
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                    .then(() => {
+                        console.log('OTP sent successfully');
+                    })
+                    .catch((error) => {
+                        console.error('Email send failed:', error);
+                        alert('OTP: ' + otp + '\n\nEmail sending failed. Use this OTP to verify.');
+                    });
+            } else {
+                // Demo mode - show OTP in alert
+                alert('🔑 Your OTP: ' + otp + '\n\n(Set up EmailJS to send via email)');
+            }
+        }
+
+        // Resend OTP Timer
+        function startOtpTimer() {
+            otpCountdown = 60;
+            const timerEl = document.getElementById('otpTimer');
+            const resendLink = document.getElementById('resendOtp');
+            resendLink.classList.add('disabled');
+            resendLink.innerHTML = 'Resend OTP in <span id="otpTimer">60</span>s';
+
+            if (otpInterval) clearInterval(otpInterval);
+            otpInterval = setInterval(() => {
+                otpCountdown--;
+                const timerSpan = document.getElementById('otpTimer');
+                if (timerSpan) timerSpan.textContent = otpCountdown;
+                if (otpCountdown <= 0) {
+                    clearInterval(otpInterval);
+                    resendLink.classList.remove('disabled');
+                    resendLink.innerHTML = '<a href="#" id="resendOtpLink">Resend OTP</a>';
+                    document.getElementById('resendOtpLink').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentOTP = generateOTP();
+                        localStorage.setItem('resetOTP', simpleHash(currentOTP));
+                        localStorage.setItem('otpExpiry', Date.now() + 300000);
+                        sendOTP(resetEmail, currentOTP);
+                        startOtpTimer();
+                    });
+                }
+            }, 1000);
+        }
     </script>
 </body>
 </html>
