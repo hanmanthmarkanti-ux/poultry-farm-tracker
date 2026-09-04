@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2c5f2d">
+    <meta name="description" content="Track your poultry farm - hens, chicks, production, health">
+    <title>Poultry Farm Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-egg"></i>
+            <span>Farm Tracker</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-section="hens">
+                <i class="fas fa-drumstick-bite"></i>
+                <span>Hens</span>
+            </a>
+            <a href="#" class="nav-item" data-section="chicks">
+                <i class="fas fa-baby"></i>
+                <span>Chicks</span>
+            </a>
+            <a href="#" class="nav-item" data-section="production">
+                <i class="fas fa-egg"></i>
+                <span>Production</span>
+            </a>
+            <a href="#" class="nav-item" data-section="inventory">
+                <i class="fas fa-boxes"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="#" class="nav-item" data-section="health">
+                <i class="fas fa-heartbeat"></i>
+                <span>Health</span>
+            </a>
+            <a href="#" class="nav-item" data-section="finance">
+                <i class="fas fa-chart-line"></i>
+                <span>Finance</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <span class="user-info" id="userInfo"></span>
+                <span class="date" id="currentDate"></span>
+                <button class="btn btn-clear" id="clearAll">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+                <button class="btn btn-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+                <button class="btn btn-add" id="addRecord">
+                    <i class="fas fa-plus"></i> Add Record
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-egg" style="color: #1976d2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalEggs">0</h3>
+                        <p>Eggs Today</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-drumstick-bite" style="color: #388e3c;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalHens">0</h3>
+                        <p>Total Hens</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-baby" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalChicks">0</h3>
+                        <p>Total Chicks</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fce4ec;">
+                        <i class="fas fa-heartbeat" style="color: #d32f2f;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="healthIssues">0</h3>
+                        <p>Health Issues</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Today's Production</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="production-summary">
+                            <div class="summary-item">
+                                <span class="label">Collected</span>
+                                <span class="value" id="todayCollected">0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Broken</span>
+                                <span class="value broken" id="todayBroken">0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Sold</span>
+                                <span class="value sold" id="todaySold">0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Revenue</span>
+                                <span class="value revenue" id="todayRevenue">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Weekly Trend</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Activity</h3>
+                </div>
+                <div class="card-body">
+                    <div class="activity-list" id="activityList">
+                        <p class="no-data">No recent activity. Add your first record!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hens Section -->
+        <section id="hens" class="content-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-check-circle" style="color: #388e3c;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="healthyHens">0</h3>
+                        <p>Healthy Hens</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-egg" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="layingHens">0</h3>
+                        <p>Currently Laying</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-tint" style="color: #1976d2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="moltingHens">0</h3>
+                        <p>Molting</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #ffebee;">
+                        <i class="fas fa-skull-crossbones" style="color: #d32f2f;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="deadHens">0</h3>
+                        <p>Dead (Total)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Hen Inventory</h3>
+                        <button class="btn btn-report-death" id="reportHenDeath">
+                            <i class="fas fa-skull-crossbones"></i> Report Death
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Breed</th>
+                                        <th>Count</th>
+                                        <th>Gender</th>
+                                        <th>Age (months)</th>
+                                        <th>Health</th>
+                                        <th>Dead</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="henTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Hen Health Overview</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="henHealthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Hen Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="hen-details-grid" id="henDetailsGrid">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chicks Section -->
+        <section id="chicks" class="content-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-baby" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalChicksCount">0</h3>
+                        <p>Total Chicks</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-heart" style="color: #388e3c;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="healthyChicks">0</h3>
+                        <p>Healthy</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fce4ec;">
+                        <i class="fas fa-exclamation-triangle" style="color: #d32f2f;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="sickChicks">0</h3>
+                        <p>Sick</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #ffebee;">
+                        <i class="fas fa-skull-crossbones" style="color: #d32f2f;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="deadChicks">0</h3>
+                        <p>Dead (Total)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Chick Batches</h3>
+                        <button class="btn btn-report-death" id="reportChickDeath">
+                            <i class="fas fa-skull-crossbones"></i> Report Death
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Batch Name</th>
+                                        <th>Received Date</th>
+                                        <th>Initial Count</th>
+                                        <th>Current Count</th>
+                                        <th>Dead</th>
+                                        <th>Age (weeks)</th>
+                                        <th>Health</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="chickTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Growth Tracking</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chickGrowthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Chick Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chick-details-grid" id="chickDetailsGrid">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Production Section -->
+        <section id="production" class="content-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-calendar-day" style="color: #1976d2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="dailyAvg">0</h3>
+                        <p>Daily Average</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-calendar-week" style="color: #388e3c;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="weeklyTotal">0</h3>
+                        <p>This Week</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-calendar" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="monthlyTotal">0</h3>
+                        <p>This Month</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8eaf6;">
+                        <i class="fas fa-percentage" style="color: #5c6bc0;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="layingRate">0%</h3>
+                        <p>Laying Rate</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Production History</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Collected</th>
+                                    <th>Broken</th>
+                                    <th>Sold</th>
+                                    <th>Revenue</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productionTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inventory Section -->
+        <section id="inventory" class="content-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-wheat-awn" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="feedKg">0 kg</h3>
+                        <p>Feed Stock</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-flask" style="color: #388e3c;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="medicineStock">0</h3>
+                        <p>Medicine Units</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-box" style="color: #1976d2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="eggTrays">0</h3>
+                        <p>Egg Trays</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fce4ec;">
+                        <i class="fas fa-triangle-exclamation" style="color: #d32f2f;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="lowStock">0</h3>
+                        <p>Low Stock Items</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Inventory Items</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Current Stock</th>
+                                    <th>Min Required</th>
+                                    <th>Unit</th>
+                                    <th>Status</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health Section -->
+        <section id="health" class="content-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-check-circle" style="color: #388e3c;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="healthyAll">0</h3>
+                        <p>Total Healthy</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-exclamation-triangle" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="sickAll">0</h3>
+                        <p>Total Sick</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fce4ec;">
+                        <i class="fas fa-skull-crossbones" style="color: #d32f2f;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="mortalityMonth">0</h3>
+                        <p>Mortality (Month)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-syringe" style="color: #1976d2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="nextVaccine">--</h3>
+                        <p>Next Vaccine</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Health Records</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Issue</th>
+                                        <th>Affected</th>
+                                        <th>Treatment</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="healthTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Vaccination Schedule</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="vaccine-list" id="vaccineList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Mortality Log</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Count</th>
+                                    <th>Cause</th>
+                                    <th>Action Taken</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mortalityTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Finance Section -->
+        <section id="finance" class="content-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-indian-rupee-sign" style="color: #388e3c;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalRevenue">₹0</h3>
+                        <p>Monthly Revenue</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fce4ec;">
+                        <i class="fas fa-receipt" style="color: #d32f2f;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalExpenses">₹0</h3>
+                        <p>Monthly Expenses</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-chart-pie" style="color: #1976d2;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="profit">₹0</h3>
+                        <p>Net Profit</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-coins" style="color: #f57c00;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="eggPrice">₹6</h3>
+                        <p>Egg Price</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Expense Breakdown</h3>
+                </div>
+                <div class="card-body">
+                    <div class="expense-list" id="expenseList">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Record Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Record</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
