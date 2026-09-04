@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Setup Guide - Poultry Farm Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f6fa; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #2c5f2d; margin-bottom: 10px; }
+        .header p { color: #666; }
+        .card { background: white; border-radius: 15px; padding: 30px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .card h2 { color: #2c5f2d; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .step { display: flex; gap: 20px; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #eee; }
+        .step:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .step-number { width: 40px; height: 40px; background: #2c5f2d; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+        .step-content h3 { color: #333; margin-bottom: 8px; }
+        .step-content p { color: #666; font-size: 0.95rem; line-height: 1.6; }
+        .step-content a { color: #2c5f2d; text-decoration: none; font-weight: 500; }
+        .step-content a:hover { text-decoration: underline; }
+        .code { background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; margin: 10px 0; word-break: break-all; border: 1px solid #e0e0e0; }
+        .highlight { background: #fff3cd; padding: 2px 6px; border-radius: 4px; }
+        .btn { display: inline-block; padding: 12px 25px; background: #2c5f2d; color: white; text-decoration: none; border-radius: 8px; font-weight: 500; margin-top: 10px; }
+        .btn:hover { background: #1e4d2b; }
+        .warning { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .warning i { color: #856404; margin-right: 8px; }
+        .success { background: #d4edda; border: 1px solid #28a745; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .success i { color: #155724; margin-right: 8px; }
+        .back-link { text-align: center; margin-top: 20px; }
+        .back-link a { color: #2c5f2d; text-decoration: none; }
+        .input-group { display: flex; gap: 10px; margin-top: 15px; }
+        .input-group input { flex: 1; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; font-family: inherit; }
+        .input-group input:focus { outline: none; border-color: #2c5f2d; }
+        .input-group button { padding: 12px 20px; background: #2c5f2d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; }
+        .saved-keys { margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 8px; display: none; }
+        .saved-keys.show { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐔 Email OTP Setup</h1>
+            <p>Follow these steps to enable real email OTP for password reset</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-cog"></i> Quick Setup (5 minutes)</h2>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Create Free EmailJS Account</h3>
+                    <p>Go to <a href="https://www.emailjs.com/" target="_blank">emailjs.com</a> and sign up for free. You get <strong>200 emails/month free</strong>.</p>
+                    <a href="https://www.emailjs.com/" target="_blank" class="btn">Open EmailJS →</a>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Add Email Service</h3>
+                    <p>In EmailJS dashboard, go to <strong>Email Services</strong> → <strong>Add New Service</strong>. Choose Gmail, Outlook, or any email provider. Connect your email.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Create Email Template</h3>
+                    <p>Go to <strong>Email Templates</strong> → <strong>Create New Template</strong>. Use this template:</p>
+                    <div class="code">
+Subject: Your OTP Code - Poultry Farm Tracker<br><br>
+Hello,<br><br>
+Your One-Time Password (OTP) for password reset is:<br><br>
+<strong>{{otp_code}}</strong><br><br>
+This OTP is valid for 5 minutes.<br>
+Do not share this code with anyone.<br><br>
+ Regards,<br>
+Poultry Farm Tracker Team
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Get Your Keys</h3>
+                    <p>Copy these 3 values from EmailJS dashboard:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; color: #666;">
+                        <li><strong>Public Key</strong> → Account → API Keys</li>
+                        <li><strong>Service ID</strong> → Email Services</li>
+                        <li><strong>Template ID</strong> → Email Templates</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Enter Your Keys Below</h3>
+                    <p>Paste your keys here and click Save. They will be stored in your browser.</p>
+                    
+                    <div class="input-group">
+                        <input type="text" id="publicKey" placeholder="Public Key">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="serviceId" placeholder="Service ID (e.g., service_xxxxx)">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="templateId" placeholder="Template ID (e.g., template_xxxxx)">
+                    </div>
+                    <button class="btn" onclick="saveKeys()" style="width: 100%; margin-top: 15px;">
+                        <i class="fas fa-save"></i> Save Keys
+                    </button>
+                    <div class="saved-keys" id="savedMsg">
+                        <i class="fas fa-check-circle"></i> Keys saved! <a href="login.html">Go to Login →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-question-circle"></i> How It Works</h2>
+            <p style="color: #666; line-height: 1.8;">
+                1. User clicks "Forgot Password" and enters their registered email<br>
+                2. System generates a 6-digit OTP<br>
+                3. OTP is sent to their email via EmailJS<br>
+                4. User enters the OTP<br>
+                5. User creates a new password<br><br>
+                <strong>Your data stays in the browser</strong> - only the OTP email is sent through EmailJS.
+            </p>
+        </div>
+
+        <div class="warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Important:</strong> Keep your EmailJS keys private. They are stored locally in your browser only.
+        </div>
+
+        <div class="back-link">
+            <a href="login.html">← Back to Login</a>
+        </div>
+    </div>
+
+    <script>
+        // Load saved keys
+        const saved = localStorage.getItem('emailjs_keys');
+        if (saved) {
+            const keys = JSON.parse(saved);
+            document.getElementById('publicKey').value = keys.publicKey || '';
+            document.getElementById('serviceId').value = keys.serviceId || '';
+            document.getElementById('templateId').value = keys.templateId || '';
+        }
+
+        function saveKeys() {
+            const keys = {
+                publicKey: document.getElementById('publicKey').value.trim(),
+                serviceId: document.getElementById('serviceId').value.trim(),
+                templateId: document.getElementById('templateId').value.trim()
+            };
+            
+            if (!keys.publicKey || !keys.serviceId || !keys.templateId) {
+                alert('Please fill in all 3 fields');
+                return;
+            }
+            
+            localStorage.setItem('emailjs_keys', JSON.stringify(keys));
+            document.getElementById('savedMsg').classList.add('show');
+        }
+    </script>
+</body>
+</html>

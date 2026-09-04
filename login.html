@@ -110,6 +110,8 @@
         .login-form.hidden { display: none; }
         .back-to-login { text-align: center; margin-top: 20px; }
         .back-to-login a { color: #2c5f2d; text-decoration: none; font-weight: 500; }
+        .setup-link { text-align: center; margin-top: 15px; font-size: 0.85rem; color: #666; }
+        .setup-link a { color: #2c5f2d; text-decoration: none; }
         .otp-container { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
         .otp-input {
             width: 50px !important;
@@ -316,23 +318,21 @@
                 <div class="back-to-login">
                     <a href="#" id="backToLogin">← Back to Login</a>
                 </div>
+                <div class="setup-link">
+                    <a href="setup.html"><i class="fas fa-cog"></i> Setup Email OTP (One time setup)</a>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Initialize EmailJS (FREE - get your keys at https://www.emailjs.com/)
-        // Replace these with your own EmailJS keys
-        const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
-        const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
-        const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-
-        // Try to initialize EmailJS
-        try {
-            if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
-                emailjs.init(EMAILJS_PUBLIC_KEY);
-            }
-        } catch(e) {}
+        // Load EmailJS keys from localStorage (set via setup.html)
+        let emailjsConfig = { publicKey: '', serviceId: '', templateId: '' };
+        const savedKeys = localStorage.getItem('emailjs_keys');
+        if (savedKeys) {
+            emailjsConfig = JSON.parse(savedKeys);
+            try { emailjs.init(emailjsConfig.publicKey); } catch(e) {}
+        }
 
         // Check if already logged in
         const currentUser = localStorage.getItem('currentUser');
@@ -503,12 +503,10 @@
                     return;
                 }
                 currentOTP = generateOTP();
-                // Store OTP temporarily
                 localStorage.setItem('resetOTP', simpleHash(currentOTP));
                 localStorage.setItem('resetEmail', resetEmail);
-                localStorage.setItem('otpExpiry', Date.now() + 300000); // 5 minutes
+                localStorage.setItem('otpExpiry', Date.now() + 300000);
 
-                // Send OTP via EmailJS or show it
                 sendOTP(resetEmail, currentOTP);
 
                 document.getElementById('otpEmailDisplay').textContent = resetEmail;
@@ -574,33 +572,30 @@
             }
         });
 
-        // Send OTP
+        // Send OTP via EmailJS
         function sendOTP(email, otp) {
-            // If EmailJS is configured, send email
-            if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
+            if (emailjsConfig.publicKey && emailjsConfig.serviceId && emailjsConfig.templateId) {
                 const templateParams = {
                     to_email: email,
                     otp_code: otp,
                     farm_name: 'Poultry Farm Tracker'
                 };
-                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, templateParams)
                     .then(() => {
-                        console.log('OTP sent successfully');
+                        console.log('OTP email sent to:', email);
                     })
                     .catch((error) => {
-                        console.error('Email send failed:', error);
-                        alert('OTP: ' + otp + '\n\nEmail sending failed. Use this OTP to verify.');
+                        console.error('Email failed:', error);
+                        alert('Email sending failed. Your OTP is: ' + otp);
                     });
             } else {
-                // Demo mode - show OTP in alert
-                alert('🔑 Your OTP: ' + otp + '\n\n(Set up EmailJS to send via email)');
+                alert('⚠️ Email not configured!\n\nSetup guide: setup.html\n\nYour OTP: ' + otp);
             }
         }
 
         // Resend OTP Timer
         function startOtpTimer() {
             otpCountdown = 60;
-            const timerEl = document.getElementById('otpTimer');
             const resendLink = document.getElementById('resendOtp');
             resendLink.classList.add('disabled');
             resendLink.innerHTML = 'Resend OTP in <span id="otpTimer">60</span>s';
