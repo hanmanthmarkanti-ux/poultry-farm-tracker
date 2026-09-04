@@ -246,6 +246,40 @@
             display: none;
         }
 
+        .reset-form {
+            display: none;
+        }
+
+        .reset-form.active {
+            display: block;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a {
+            color: #2c5f2d;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .back-to-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-to-login a {
+            color: #2c5f2d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -357,6 +391,7 @@
                         <label class="remember-me">
                             <input type="checkbox" id="rememberMe"> Remember me
                         </label>
+                        <a href="#" class="forgot-link" id="showForgot">Forgot Password?</a>
                     </div>
                     <button type="submit" class="btn-login">
                         <i class="fas fa-sign-in-alt"></i> Sign In
@@ -414,6 +449,24 @@
                             <input type="password" id="regConfirmPassword" placeholder="Confirm password" required>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label>Security Question</label>
+                        <select id="regSecurityQuestion" required>
+                            <option value="">Select a question</option>
+                            <option value="pet">What is your pet's name?</option>
+                            <option value="school">What school did you attend?</option>
+                            <option value="city">What city were you born in?</option>
+                            <option value="color">What is your favorite color?</option>
+                            <option value="food">What is your favorite food?</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Security Answer</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-shield-alt"></i>
+                            <input type="text" id="regSecurityAnswer" placeholder="Your answer" required>
+                        </div>
+                    </div>
                     <button type="submit" class="btn-login">
                         <i class="fas fa-user-plus"></i> Create Account
                     </button>
@@ -424,6 +477,67 @@
                 <p class="register-link">
                     Already have an account? <a href="#" id="showLogin">Sign In</a>
                 </p>
+            </div>
+
+            <!-- Reset Password Form -->
+            <div class="reset-form" id="resetForm">
+                <h2>Reset Password</h2>
+                <p class="subtitle">Answer your security question to reset</p>
+                
+                <div class="error-message" id="resetError">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="resetErrorText">Error occurred</span>
+                </div>
+
+                <div class="success-message" id="resetSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="resetSuccessText">Password reset successful!</span>
+                </div>
+
+                <form id="resetPasswordForm">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="resetUsername" placeholder="Enter your username" required>
+                        </div>
+                    </div>
+                    <div class="form-group" id="securityQuestionGroup" style="display: none;">
+                        <label>Security Question</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-question-circle"></i>
+                            <input type="text" id="resetSecurityQuestion" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group" id="securityAnswerGroup" style="display: none;">
+                        <label>Your Answer</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-shield-alt"></i>
+                            <input type="text" id="resetSecurityAnswer" placeholder="Enter your answer" required>
+                        </div>
+                    </div>
+                    <div class="form-group" id="newPasswordGroup" style="display: none;">
+                        <label>New Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="resetNewPassword" placeholder="Min 6 characters" minlength="6" required>
+                        </div>
+                    </div>
+                    <div class="form-group" id="confirmPasswordGroup" style="display: none;">
+                        <label>Confirm New Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="resetConfirmPassword" placeholder="Confirm password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-login" id="resetSubmitBtn">
+                        <i class="fas fa-search"></i> Find Account
+                    </button>
+                </form>
+                
+                <div class="back-to-login">
+                    <a href="#" id="backToLogin">← Back to Login</a>
+                </div>
             </div>
         </div>
     </div>
@@ -446,6 +560,26 @@
             e.preventDefault();
             document.getElementById('registerForm').classList.remove('active');
             document.getElementById('loginForm').classList.remove('hidden');
+        });
+
+        document.getElementById('showForgot').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('resetForm').classList.add('active');
+        });
+
+        document.getElementById('backToLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('resetForm').classList.remove('active');
+            document.getElementById('loginForm').classList.remove('hidden');
+            // Reset form state
+            document.getElementById('securityQuestionGroup').style.display = 'none';
+            document.getElementById('securityAnswerGroup').style.display = 'none';
+            document.getElementById('newPasswordGroup').style.display = 'none';
+            document.getElementById('confirmPasswordGroup').style.display = 'none';
+            document.getElementById('resetSubmitBtn').innerHTML = '<i class="fas fa-search"></i> Find Account';
+            document.getElementById('resetError').classList.remove('show');
+            document.getElementById('resetSuccess').classList.remove('show');
         });
 
         // Simple hash function
@@ -502,6 +636,8 @@
             const username = document.getElementById('regUsername').value.trim();
             const password = document.getElementById('regPassword').value;
             const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const securityQuestion = document.getElementById('regSecurityQuestion').value;
+            const securityAnswer = document.getElementById('regSecurityAnswer').value.trim().toLowerCase();
             
             // Hide previous messages
             document.getElementById('registerError').classList.remove('show');
@@ -511,6 +647,12 @@
             if (password !== confirmPassword) {
                 document.getElementById('registerError').classList.add('show');
                 document.getElementById('registerErrorText').textContent = 'Passwords do not match';
+                return;
+            }
+            
+            if (!securityQuestion) {
+                document.getElementById('registerError').classList.add('show');
+                document.getElementById('registerErrorText').textContent = 'Please select a security question';
                 return;
             }
             
@@ -528,6 +670,8 @@
                 name: name,
                 username: username,
                 password: simpleHash(password),
+                securityQuestion: securityQuestion,
+                securityAnswer: simpleHash(securityAnswer),
                 createdAt: new Date().toISOString()
             };
             
@@ -557,6 +701,115 @@
                 document.getElementById('loginUsername').value = username;
                 document.getElementById('loginPassword').focus();
             }, 1500);
+        });
+
+        // Reset Password
+        let resetUsername = '';
+        let resetStep = 1;
+
+        document.getElementById('resetPasswordForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            document.getElementById('resetError').classList.remove('show');
+            document.getElementById('resetSuccess').classList.remove('show');
+            
+            if (resetStep === 1) {
+                // Find account
+                const username = document.getElementById('resetUsername').value.trim();
+                const users = getUsers();
+                const user = users.find(u => u.username === username);
+                
+                if (!user) {
+                    document.getElementById('resetError').classList.add('show');
+                    document.getElementById('resetErrorText').textContent = 'Username not found';
+                    return;
+                }
+                
+                if (!user.securityQuestion) {
+                    document.getElementById('resetError').classList.add('show');
+                    document.getElementById('resetErrorText').textContent = 'This account has no security question set. Please contact support.';
+                    return;
+                }
+                
+                resetUsername = username;
+                
+                // Show security question
+                const questions = {
+                    pet: "What is your pet's name?",
+                    school: "What school did you attend?",
+                    city: "What city were you born in?",
+                    color: "What is your favorite color?",
+                    food: "What is your favorite food?"
+                };
+                
+                document.getElementById('resetSecurityQuestion').value = questions[user.securityQuestion] || user.securityQuestion;
+                document.getElementById('securityQuestionGroup').style.display = 'block';
+                document.getElementById('securityAnswerGroup').style.display = 'block';
+                document.getElementById('resetSubmitBtn').innerHTML = '<i class="fas fa-check"></i> Verify Answer';
+                resetStep = 2;
+                
+            } else if (resetStep === 2) {
+                // Verify answer
+                const answer = document.getElementById('resetSecurityAnswer').value.trim().toLowerCase();
+                const users = getUsers();
+                const user = users.find(u => u.username === resetUsername);
+                
+                if (user.securityAnswer !== simpleHash(answer)) {
+                    document.getElementById('resetError').classList.add('show');
+                    document.getElementById('resetErrorText').textContent = 'Incorrect answer. Please try again.';
+                    return;
+                }
+                
+                // Show new password fields
+                document.getElementById('newPasswordGroup').style.display = 'block';
+                document.getElementById('confirmPasswordGroup').style.display = 'block';
+                document.getElementById('resetSubmitBtn').innerHTML = '<i class="fas fa-key"></i> Reset Password';
+                resetStep = 3;
+                
+            } else if (resetStep === 3) {
+                // Reset password
+                const newPassword = document.getElementById('resetNewPassword').value;
+                const confirmPassword = document.getElementById('resetConfirmPassword').value;
+                
+                if (newPassword !== confirmPassword) {
+                    document.getElementById('resetError').classList.add('show');
+                    document.getElementById('resetErrorText').textContent = 'Passwords do not match';
+                    return;
+                }
+                
+                if (newPassword.length < 6) {
+                    document.getElementById('resetError').classList.add('show');
+                    document.getElementById('resetErrorText').textContent = 'Password must be at least 6 characters';
+                    return;
+                }
+                
+                // Update password
+                const users = getUsers();
+                const userIndex = users.findIndex(u => u.username === resetUsername);
+                users[userIndex].password = simpleHash(newPassword);
+                saveUsers(users);
+                
+                document.getElementById('resetSuccess').classList.add('show');
+                document.getElementById('resetSuccessText').textContent = 'Password reset successful! You can now login.';
+                document.getElementById('resetSubmitBtn').disabled = true;
+                
+                setTimeout(() => {
+                    document.getElementById('resetForm').classList.remove('active');
+                    document.getElementById('loginForm').classList.remove('hidden');
+                    document.getElementById('loginUsername').value = resetUsername;
+                    document.getElementById('loginPassword').focus();
+                    // Reset form
+                    resetStep = 1;
+                    resetUsername = '';
+                    document.getElementById('resetPasswordForm').reset();
+                    document.getElementById('securityQuestionGroup').style.display = 'none';
+                    document.getElementById('securityAnswerGroup').style.display = 'none';
+                    document.getElementById('newPasswordGroup').style.display = 'none';
+                    document.getElementById('confirmPasswordGroup').style.display = 'none';
+                    document.getElementById('resetSubmitBtn').innerHTML = '<i class="fas fa-search"></i> Find Account';
+                    document.getElementById('resetSubmitBtn').disabled = false;
+                }, 2000);
+            }
         });
     </script>
 </body>
