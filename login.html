@@ -572,24 +572,32 @@
             }
         });
 
-        // Send OTP via EmailJS
+        // Send OTP via EmailJS - Works for ALL registered emails
         function sendOTP(email, otp) {
+            // Check if EmailJS is configured
             if (emailjsConfig.publicKey && emailjsConfig.serviceId && emailjsConfig.templateId) {
                 const templateParams = {
                     to_email: email,
                     otp_code: otp,
-                    farm_name: 'Poultry Farm Tracker'
+                    farm_name: 'Poultry Farm Tracker',
+                    message: 'Your OTP for password reset'
                 };
+                
                 emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, templateParams)
                     .then(() => {
-                        console.log('OTP email sent to:', email);
+                        console.log('✅ OTP sent to:', email);
                     })
                     .catch((error) => {
                         console.error('Email failed:', error);
-                        alert('Email sending failed. Your OTP is: ' + otp);
+                        // Fallback: show OTP
+                        alert('📧 Email sending failed.\n\nYour OTP: ' + otp + '\n\nPlease enter this code.');
                     });
             } else {
-                alert('⚠️ Email not configured!\n\nSetup guide: setup.html\n\nYour OTP: ' + otp);
+                // EmailJS not configured - show setup message
+                alert('⚠️ Email OTP not configured yet!\n\n' +
+                      'To send real emails, visit:\n' +
+                      'setup.html (one time setup)\n\n' +
+                      '📱 Your OTP: ' + otp);
             }
         }
 

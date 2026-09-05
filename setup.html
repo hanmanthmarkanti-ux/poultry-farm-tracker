@@ -135,9 +135,19 @@ Poultry Farm Tracker Team
             </p>
         </div>
 
+        <div class="card">
+            <h2><i class="fas fa-check-circle"></i> Test Your Setup</h2>
+            <p style="color: #666; margin-bottom: 15px;">After saving your keys, test if email OTP works:</p>
+            <div class="input-group">
+                <input type="email" id="testEmail" placeholder="Enter your email to test">
+                <button onclick="testEmail()">Send Test</button>
+            </div>
+            <div id="testResult" style="margin-top: 15px; display: none;"></div>
+        </div>
+
         <div class="warning">
             <i class="fas fa-exclamation-triangle"></i>
-            <strong>Important:</strong> Keep your EmailJS keys private. They are stored locally in your browser only.
+            <strong>Important:</strong> After setup, OTP will be sent to <strong>ALL registered emails</strong> when they click "Forgot Password". Each user receives their own OTP.
         </div>
 
         <div class="back-link">
@@ -169,6 +179,46 @@ Poultry Farm Tracker Team
             
             localStorage.setItem('emailjs_keys', JSON.stringify(keys));
             document.getElementById('savedMsg').classList.add('show');
+        }
+
+        function testEmail() {
+            const email = document.getElementById('testEmail').value.trim();
+            if (!email) {
+                alert('Enter an email to test');
+                return;
+            }
+
+            const keys = JSON.parse(localStorage.getItem('emailjs_keys') || '{}');
+            if (!keys.publicKey || !keys.serviceId || !keys.templateId) {
+                alert('Please save your keys first!');
+                return;
+            }
+
+            // Initialize EmailJS
+            emailjs.init(keys.publicKey);
+
+            const testOTP = '123456';
+            const templateParams = {
+                to_email: email,
+                otp_code: testOTP,
+                farm_name: 'Poultry Farm Tracker',
+                message: 'Test email'
+            };
+
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '⏳ Sending test email...';
+            resultDiv.style.background = '#fff3cd';
+
+            emailjs.send(keys.serviceId, keys.templateId, templateParams)
+                .then(() => {
+                    resultDiv.innerHTML = '✅ Test email sent to ' + email + '! Check your inbox.';
+                    resultDiv.style.background = '#d4edda';
+                })
+                .catch((error) => {
+                    resultDiv.innerHTML = '❌ Failed: ' + error.text;
+                    resultDiv.style.background = '#f8d7da';
+                });
         }
     </script>
 </body>
